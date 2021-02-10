@@ -1,0 +1,125 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap');
+
+* {
+  font-family: "Montserrat", sans-serif;
+  font-weight: 500;
+  padding: 0;
+  margin: 0;
+}
+body {
+    display: flex;
+}
+
+header {
+    font-size: 30px;
+    border-bottom: 1px solid grey;
+    margin-bottom: 30px;
+    padding: 15px
+}
+header img {
+    width: 45px;
+    margin-top: 5px;
+    
+}
+navbar {
+    position: relative;
+    left: 0;
+    height: 100vh;
+    border-right: 1px grey solid;
+    width: 300px
+}
+navbar h2 {
+    margin-bottom: 10px;
+}
+#libraryLog {
+    border-bottom: 1px grey solid;
+    padding-bottom: 35px;
+    padding-left: 10px;
+    margin-bottom: 30px;
+}
+#books {
+    padding-bottom: 35px;
+    padding-left: 10px;
+    
+}
+#books h4 {
+    padding-bottom: 10px;
+}
+.delete-button {
+    display: inline-block;
+    
+    margin-left: 10px;
+    opacity: 1;
+    cursor: pointer;
+    border: none;
+}
+.delete-button:before:hover {
+    color:rgb(rgb(247, 62, 139), green, blue)
+}
+.delete-button:before {
+    content: 'x';
+    color:red;
+    font-size: 20px;
+}
+
+#book-titles {
+    width: 100%;
+    display: flex;
+    max-width: 150px;
+    flex-wrap: wrap;
+}
+
+
+
+
+main {
+    justify-self: flex-end;
+    align-self: flex-end;
+    width: 100%;
+}
+#main-container {
+    display: flex;
+    width: 100%;
+    height: 100vh;
+    flex-wrap: wrap;
+   
+}
+
+.card {
+    display: flex;
+    flex-direction: column;
+    margin: 30px;
+    width: 300px;
+    height: 350px;
+    border: 1px grey solid;
+    font-size: 40px;
+    text-align: center;
+}
+.card-title {
+    border-bottom: 1px grey solid;
+    padding: 5px;
+}
+
+.card-bottom {
+    display: flex;
+    position: relative;
+    top: 68.25%;
+    justify-self: flex-end;
+    height: 50px;
+    border: 1px grey solid;
+    
+}
+.card-bottom-left {
+    font-size: 20px;
+    width: 50%;
+    align-self: center;
+    text-align: start;
+    padding-left: 5px;
+}
+.card-bottom-right {
+    font-size: 20px;
+    width: 50%;
+    align-self: center;
+    text-align: end;
+    padding-right: 5px;
+}
