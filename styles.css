@@ -90,7 +90,7 @@ main {
     flex-direction: column;
     margin: 30px;
     width: 300px;
-    height: 350px;
+    height: 150px;
     border: 1px grey solid;
     font-size: 40px;
     text-align: center;
@@ -103,23 +103,46 @@ main {
 .card-bottom {
     display: flex;
     position: relative;
-    top: 68.25%;
+    top: 0%;
     justify-self: flex-end;
-    height: 50px;
+    height: 30px;
     border: 1px grey solid;
     
 }
 .card-bottom-left {
-    font-size: 20px;
+    font-size: 15px;
     width: 50%;
     align-self: center;
     text-align: start;
     padding-left: 5px;
 }
 .card-bottom-right {
-    font-size: 20px;
+    font-size: 15px;
     width: 50%;
     align-self: center;
     text-align: end;
     padding-right: 5px;
+}
+.button-container {
+    display: flex;
+    height: 60px;
+}
+
+.read-button {
+    font-size: 30px;
+    width: 50%;
+    background: rgb(118, 196, 94);
+    cursor: pointer;
+}
+.read-button:hover {
+    background: rgb(161, 240, 137);
+}
+.not-read-button {
+    font-size: 25px;
+    width: 50%;
+    background: rgb(214, 65, 51);
+    cursor: pointer;
+}
+.not-read-button:hover {
+    background: rgb(232, 120, 109);
 }

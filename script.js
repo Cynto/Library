@@ -30,9 +30,10 @@ function loopThroughArray() {
     let bookTitleArray = myLibrary.map(a => a.title);
     let bookAuthorArray = myLibrary.map(a => a.author);
     let bookPagesArray = myLibrary.map(a => a.pages);
-    console.log(bookPagesArray)
+    
     for(i = 0; i < myLibrary.length; i++) {
-        
+        myLibrary[i].dataBook = i;
+        console.log(myLibrary)
         const bookTitle = document.createElement('h4');
         bookTitle.textContent = bookTitleArray[i]
         bookTitle.setAttribute('data-book', `${i}`)
@@ -63,23 +64,114 @@ function loopThroughArray() {
         cardBottomRight.textContent = bookPagesArray[i] + ' Pages'
         bookCardBottom.appendChild(cardBottomRight)
 
-        const books = document.querySelector(`[data-book="${i}"]`)
-        console.log(books)
+        const buttonContainer = document.createElement('div');
+        buttonContainer.classList.add('button-container')
+        bookCard.appendChild(buttonContainer)
+
+        const readButton = document.createElement('button');
+        readButton.classList.add('read-button');
+        readButton.textContent = 'Read';
+        readButton.setAttribute('data-book', `${i}`)
+
+        const notReadButton = document.createElement('button');
+        notReadButton.classList.add('not-read-button');
+        notReadButton.textContent = 'Not Read';
+        notReadButton.setAttribute('data-book', `${i}`)
+        
+        if(myLibrary[i].readIt === true) {
+            buttonContainer.appendChild(readButton)
+        }
+        else {
+            buttonContainer.appendChild(notReadButton)
+        }
+
+        readButton.addEventListener('click', () => {
+            if(readButton.textContent === 'Read') {
+                readButton.classList.remove('read-button')
+                readButton.classList.add('not-read-button');
+                readButton.textContent = 'Not Read';
+                for(i = 0; i < myLibrary.length; i++) {
+                    if(myLibrary[i].readIt === true) {
+                        myLibrary[readButton.getAttribute('data-book')].readIt = false;
+                        let completedBooks = myLibrary.filter(a => a.readIt === true);
+                        bookCompletedText.textContent = 'Completed Books: ' + completedBooks.length;
+                        console.log(myLibrary)
+            
+                    }
+                }
+                
+            }
+            else {
+                readButton.classList.add('read-button');
+                readButton.classList.remove('not-read-button')
+                readButton.textContent = 'Read';
+                for(i = 0; i < myLibrary.length; i++) {
+                    if(myLibrary[i].readIt === false) {
+                        myLibrary[readButton.getAttribute('data-book')].readIt = true;
+                        let completedBooks = myLibrary.filter(a => a.readIt === true);
+                        bookCompletedText.textContent = 'Completed Books: ' + completedBooks.length;
+            
+                    }
+                }
+            }
+        })
+        notReadButton.addEventListener('click', () => {
+            if(notReadButton.textContent === 'Read') {
+                notReadButton.classList.remove('read-button')
+                notReadButton.classList.add('not-read-button');
+                notReadButton.textContent = 'Not Read';
+                for(i = 0; i < myLibrary.length; i++) {
+                    if(myLibrary[i].readIt === true) {
+                        myLibrary[notReadButton.getAttribute('data-book')].readIt = false;
+                        let completedBooks = myLibrary.filter(a => a.readIt === true);
+                        bookCompletedText.textContent = 'Completed Books: ' + completedBooks.length;
+                        console.log(myLibrary)
+            
+                    }
+                }
+                
+                
+                
+            }
+            else {
+                notReadButton.classList.add('read-button');
+                notReadButton.classList.remove('not-read-button')
+                notReadButton.textContent = 'Read';
+                for(i = 0; i < myLibrary.length; i++) {
+                    if(myLibrary[i].readIt === false) {
+                        myLibrary[notReadButton.getAttribute('data-book')].readIt = true;
+                        let completedBooks = myLibrary.filter(a => a.readIt === true);
+                        bookCompletedText.textContent = 'Completed Books: ' + completedBooks.length;
+            
+                    }
+                }
+            }
+        })
+       
+        
+        
         const deleteButton = document.createElement('button');
+        deleteButton.setAttribute('data-book', `${i}`)
+        deleteButton.value = `${deleteButton.getAttribute('data-book')}`
+        console.log()
         //when delete button is clicked, it removes the book from all relevent fields.
         deleteButton.addEventListener('click', () => {
-            console.log(bookTitleArray)
-            books.remove();
-            console.log(books)
-            myLibrary.splice(myLibrary[i], 1);
-            bookTitleArray.splice(bookTitleArray[i], 1);
-            console.log(myLibrary)
+            let click = deleteButton.value;
+            click = Number(click)
+            //if 
+            myLibrary = myLibrary.filter(a => a.dataBook != click)
             let completedBooks = myLibrary.filter(a => a.readIt === true);
+            //book and completed book count is updated
             bookCompletedText.textContent = 'Completed Books: ' + completedBooks.length;
-
-            bookTitleContainer.removeChild(bookTitle)
             bookCountText.textContent = 'Books: ' + myLibrary.length;
-            bookCompletedText.textContent = 'Completed Books: ' + completedBooks.length;
+            
+
+           const allBooks = document.querySelectorAll(`[data-book="${deleteButton.value}"]`);
+           //loops over all html elements with the same value as the delete button, then removes them.
+           for(i = 0; i < allBooks.length; i++) {
+               const oneBook = document.querySelector(`[data-book="${deleteButton.value}"]`);
+                oneBook.remove();
+           }
 
         })
         deleteButton.classList.add('delete-button');
