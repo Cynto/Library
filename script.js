@@ -13,7 +13,7 @@ const form = document.querySelector('.new-book-form');
 
 //array which stores book objects
 let myLibrary = [];
-
+let storedLibrary = []
 
 //book object constructor
 function Book(title, author, pages, readIt) {
@@ -25,11 +25,14 @@ function Book(title, author, pages, readIt) {
 
 function addBookToLibrary(title, author, pages, readIt) {
     const bookObject =  new Book(title, author, pages, readIt);
+    console.log(bookObject)
     myLibrary.push(bookObject);
-    console.log(myLibrary.length)
+    console.log(myLibrary)
+    
+    console.log(localStorage)
     
 }
-addBookToLibrary('Harry Potter', 'JK Rowling', 500, true);
+
 
 
 function loopThroughArray() {
@@ -50,7 +53,7 @@ function loopThroughArray() {
     for(i = 0; i < myLibrary.length; i++) {
           
         myLibrary[i].dataBook = i;
-        console.log('length: ' + myLibrary.length)
+        
         console.log(myLibrary)
         const bookTitle = document.createElement('h4');
         bookTitle.textContent = bookTitleArray[i]
@@ -197,8 +200,8 @@ function loopThroughArray() {
             //book and completed book count is updated
             bookCompletedText.textContent = 'Completed Books: ' + completedBooks.length;
             bookCountText.textContent = 'Books: ' + myLibrary.length;
-            
-
+            //deleted from local storage
+            delete localStorage[`myLibrary${deleteButton.value}`]
            const allBooks = document.querySelectorAll(`[data-book="${deleteButton.value}"]`);
            //loops over all html elements with the same value as the delete button, then removes them.
            for(i = 0; i < allBooks.length; i++) {
@@ -214,9 +217,12 @@ function loopThroughArray() {
 
     }
     for(i = 0; i < myLibrary.length; i++) {
+        //array item is converted to string so it can be stored in localStorage
+        localStorage.setItem(`myLibrary${i}`, JSON.stringify(myLibrary[i]));
+        storedLibrary = JSON.parse(localStorage.getItem('myLibrary'))
         
-
     }
+
 }
 loopThroughArray()
 const submitButton = document.createElement('button');
@@ -247,6 +253,10 @@ addButton.addEventListener('click', () => {
         else if(document.getElementById('false').checked) {
             bookRead = false;
         }
+        if(bookTitle && bookAuthor && bookPages && bookRead === true || bookRead === false) {
+            
+            
+        }
         
         formSection.setAttribute('style', 'visibility: hidden');
         addBookToLibrary(bookTitle, bookAuthor, bookPages, bookRead)
@@ -272,3 +282,19 @@ function closeForm(e) {
         formSection.setAttribute('style', 'visibility: hidden');
     }
 }
+
+
+    
+//loops over localStorage and creates bookObjects which are then pushed to the myLibrary array;
+for(let i = 0; i < localStorage.length; i++) {
+    storedLibrary = JSON.parse(localStorage.getItem(`myLibrary${i}`))
+    const bookObject = new Book(storedLibrary.title, storedLibrary.author, storedLibrary.pages, storedLibrary.readIt)
+    myLibrary.push(bookObject)
+}
+function hasDuplicates(array) {
+    return (new Set(array)).size !== array.length;
+}
+hasDuplicates(myLibrary)
+
+loopThroughArray();
+console.log(localStorage)

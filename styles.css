@@ -149,7 +149,7 @@ main {
 
 .read-button {
     font-size: 30px;
-    width: 50%;
+    width: 100%;
     background: rgb(118, 196, 94);
     cursor: pointer;
     color: black;
@@ -159,7 +159,7 @@ main {
 }
 .not-read-button {
     font-size: 25px;
-    width: 50%;
+    width: 100%;
     background: rgb(214, 65, 51);
     cursor: pointer;
     color: black;
@@ -170,9 +170,9 @@ main {
 
 .card-delete {
     border: none;
-    position: absolute;
-    right: 69.3%;
-    top: 19%;
+    position: relative;
+    right: -24%;
+    top: -40%;
     
     cursor: pointer;
     background: none;
