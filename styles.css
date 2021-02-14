@@ -5,7 +5,7 @@
   font-weight: 500;
   padding: 0;
   margin: 0;
-  color:rgb(82, 82, 85);
+  
   
 }
 body {
@@ -14,7 +14,7 @@ body {
 
 header {
     font-size: 30px;
-    border-bottom: 1px solid grey;
+    border-bottom: 1px solid rgb(189, 234, 224);
     margin-bottom: 30px;
     padding: 15px
 }
@@ -26,26 +26,34 @@ header img {
 navbar {
     position: relative;
     left: 0;
-    height: 100vh;
-    border-right: 1px grey solid;
-    width: 300px
+    height: 110vh;
+    border-right: 1px rgb(189, 234, 224) solid;
+    width: 300px;
+    background: rgb(22, 105, 122);
+    color: rgb(172, 230, 241)
+    
 }
 navbar h2 {
     margin-bottom: 10px;
+    text-decoration: underline;
 }
 #libraryLog {
-    border-bottom: 1px grey solid;
+    border-bottom: 1px rgb(189, 234, 224) solid;
     padding-bottom: 35px;
     padding-left: 10px;
     margin-bottom: 30px;
+    color: rgb(172, 230, 241)
+    
 }
 #books {
     padding-bottom: 35px;
     padding-left: 10px;
+   
     
 }
 #books h4 {
     padding-bottom: 10px;
+    
 }
 .delete-button {
     display: inline-block;
@@ -60,8 +68,9 @@ navbar h2 {
 }
 .delete-button:before {
     content: 'x';
-    color:red;
+    color: rgb(189, 234, 224);
     font-size: 20px;
+    background:rgb(22, 105, 122);
 }
 
 #book-titles {
@@ -88,7 +97,7 @@ main {
     flex-wrap: wrap;
     
     align-content: flex-start;
-    
+    background:  rgb(172, 230, 241);
    
 }
 
@@ -97,53 +106,89 @@ main {
     flex-direction: column;
     margin: 30px;
     margin-bottom: 10px;
-    
+    color: rgb(172, 230, 241);
     width: 300px;
     height: 350px;
-    border: solid 1px lightgray;
-    font-size: 16px;
+    border: 0.5px grey solid;
+    font-size: 18px;
     text-align: center;
     font-weight: lighter;
-    box-shadow: rgb(82, 82, 85) 1px 1px;
-}
-.card-title {
-    display: flex;
-    border: solid 1px lightgray;
-    padding: 5px;
-    height: 50px;
-    justify-content: center;
-    align-items: center;
+    
+    background: rgb(22, 105, 122);
     
 }
+.card-title-container {
+    display: flex;
+    border-bottom: solid 1px rgb(189, 234, 224);
+    padding: 5px;
+    height: 50px;
+    align-items: center;
+    
+    
+}
+.card-title-div {
+    width: 90%;
+    text-align: left;
+    
+}
+
 
 .card-bottom {
     display: flex;
     position: relative;
     top: 0%;
     justify-self: flex-end;
-    height: 30px;
-    border: solid 1px lightgray;
+    padding-left: 7px;
+    height: 60px;
+    border-bottom: solid 1px rgb(189, 234, 224);
+    align-items: center;
     
 }
-.card-bottom-left {
-    font-size: 15px;
-    width: 85%;
+.card-pages {
+    font-size: 20px;
+    text-align: left;
     align-self: center;
-    text-align: start;
-    padding-left: 5px;
-}
-.card-bottom-right {
-    font-size: 15px;
-    width: 50%;
-    align-self: center;
-    text-align: end;
+    height: 40px;
     padding-right: 5px;
+    border-bottom: solid 1px rgb(189, 234, 224);
+    width: 98%;
+    padding-left: 7px;
+    align-items: center;
+    display: flex;
+}
+.card-delete-div {
+    justify-self: flex-end;
+    display: flex;
+    position: relative;
+    right: -15px;
+    align-items: center;
+    height: 100%;
+    flex-direction: column;
+}
+.card-delete {
+    border: none;
+    position: relative;
+    right: -24%;
+    
+    
+    cursor: pointer;
+    background: none;
+}
+.card-delete:before {
+    content: 'x';
+    color: rgb(189, 234, 224);
+    font-size: 20px;
+    position: relative;
+    top: -15%;
+}
+.card-delete:focus {
+    outline: none;
 }
 .button-container {
     display: flex;
     height: 64px;
     position: relative;
-    top: 55%;
+    top: 34.5%;
     
 }
 
@@ -157,41 +202,30 @@ main {
 .read-button:hover {
     background: rgb(161, 240, 137);
 }
+.read-button:focus {
+    outline: none;
+}
 .not-read-button {
     font-size: 25px;
     width: 100%;
-    background: rgb(214, 65, 51);
+    background: rgb(195 45 33);
     cursor: pointer;
     color: black;
 }
 .not-read-button:hover {
-    background: rgb(232, 120, 109);
-}
-
-.card-delete {
-    border: none;
-    position: relative;
-    right: -24%;
-    top: -40%;
     
-    cursor: pointer;
-    background: none;
+    background: rgb(220 90 80);
 }
-.card-delete:before {
-    content: 'x';
-    color: rgb(82, 82, 85);
-    font-size: 20px;
-    position: relative;
-    top: -15%;
-}
-.card-delete:focus {
+.not-read-button:focus {
     outline: none;
 }
+
+
 #add-container {
     height: 100px;
     display: flex;
     justify-content: center;
-    
+    background: rgb(172, 230, 241);
 }
 .add-button {
     position: relative;
@@ -200,9 +234,16 @@ main {
     width: 250px;
     height: 100px;
     cursor: pointer;
+    background: rgb(143, 201, 58);
 }
 .add-button:before {
     content: 'Add Book'
+}
+.add-button:hover {
+    background: rgb(156, 216, 65)
+}
+.add-button:focus {
+    outline: none;
 }
 .add-book-section {
     width: 100%;
@@ -298,3 +339,4 @@ main {
 .submit-button:focus {
     outline: none;
 }
+

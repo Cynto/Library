@@ -7,7 +7,9 @@ const addContainer = document.querySelector('#add-container');
 const formSection = document.querySelector('.add-book-section');
 const form = document.querySelector('.new-book-form');
 
-
+const errorMessage = document.createElement('h4');
+errorMessage.setAttribute('style', 'color: red; text-align: center;')
+errorMessage.textContent = 'The Library already contains this book!'
 
 
 
@@ -25,11 +27,8 @@ function Book(title, author, pages, readIt) {
 
 function addBookToLibrary(title, author, pages, readIt) {
     const bookObject =  new Book(title, author, pages, readIt);
-    console.log(bookObject)
     myLibrary.push(bookObject);
-    console.log(myLibrary)
-    
-    console.log(localStorage)
+    addToStorage();
     
 }
 
@@ -54,7 +53,7 @@ function loopThroughArray() {
           
         myLibrary[i].dataBook = i;
         
-        console.log(myLibrary)
+        //following code adds elements to page.
         const bookTitle = document.createElement('h4');
         bookTitle.textContent = bookTitleArray[i]
         bookTitle.setAttribute('data-book', `${i}`)
@@ -66,24 +65,34 @@ function loopThroughArray() {
 
         bookCard.setAttribute('data-book', `${i}`)
 
-        const bookCardTitle = document.createElement('div');
-        bookCardTitle.classList.add('card-title');
-        bookCardTitle.textContent ='Title: ' + bookTitleArray[i]
-        bookCard.appendChild(bookCardTitle)
+        const cardTitleContainer = document.createElement('div');
+        cardTitleContainer.classList.add('card-title-container');
+        bookCard.appendChild(cardTitleContainer)
+
+        const cardTitleDiv = document.createElement('div');
+        cardTitleDiv.classList.add('card-title-div');
+        cardTitleContainer.appendChild(cardTitleDiv)
+
+        const cardTitle = document.createElement('h4');
+        cardTitle.classList.add('card-title');
+        cardTitle.textContent = 'Title: ' + bookTitleArray[i]
+        cardTitleDiv.appendChild(cardTitle)
+
+        const deleteButtonDiv = document.createElement('div');
+        deleteButtonDiv.classList.add('card-delete-div');
+        cardTitleContainer.appendChild(deleteButtonDiv);
 
         const bookCardBottom = document.createElement('div');
         bookCardBottom.classList.add('card-bottom');
+        bookCardBottom.textContent = 'Author: ' + bookAuthorArray[i]
         bookCard.appendChild(bookCardBottom)
 
-        const cardBottomLeft = document.createElement('div');
-        cardBottomLeft.classList.add('card-bottom-left');
-        cardBottomLeft.textContent = 'Author: ' + bookAuthorArray[i]
-        bookCardBottom.appendChild(cardBottomLeft)
+        const cardPages = document.createElement('div');
+        cardPages.classList.add('card-pages');
+        cardPages.textContent = bookPagesArray[i] + ' Pages'
+        bookCard.appendChild(cardPages)
 
-        const cardBottomRight = document.createElement('div');
-        cardBottomRight.classList.add('card-bottom-right');
-        cardBottomRight.textContent = bookPagesArray[i] + ' Pages'
-        bookCardBottom.appendChild(cardBottomRight)
+        
 
         const buttonContainer = document.createElement('div');
         buttonContainer.classList.add('button-container')
@@ -179,7 +188,7 @@ function loopThroughArray() {
         const cardDeleteButton = document.createElement('button');
         cardDeleteButton.classList.add('card-delete');
         cardDeleteButton.setAttribute('data-book', `${i}`)
-        bookCardTitle.appendChild(cardDeleteButton)
+        deleteButtonDiv.appendChild(cardDeleteButton)
 
         cardDeleteButton.addEventListener('click', deleteBooks);
        
@@ -216,13 +225,16 @@ function loopThroughArray() {
         
 
     }
+    
+
+}
+function addToStorage() {
     for(i = 0; i < myLibrary.length; i++) {
         //array item is converted to string so it can be stored in localStorage
         localStorage.setItem(`myLibrary${i}`, JSON.stringify(myLibrary[i]));
         storedLibrary = JSON.parse(localStorage.getItem('myLibrary'))
         
     }
-
 }
 loopThroughArray()
 const submitButton = document.createElement('button');
@@ -237,12 +249,16 @@ addContainer.appendChild(addButton)
 addButton.addEventListener('click', () => {
     formSection.setAttribute('style', 'visibility: visible');
 
+    
    
-
     submitButton.addEventListener('click', () => {
+        let bookTitleArray = myLibrary.map(a => a.title);
+        bookTitleArray = bookTitleArray.map(a => a.toLowerCase())
         //when submit button is clicked, values of fields are put in variables which are then put in addBookToLibrary function
         let bookTitle = document.getElementById('book-title').value;
+        bookTitle= bookTitle.trim();
         let bookAuthor = document.getElementById('book-author').value;
+        bookAuthor = bookAuthor.trim()
         let bookPages = document.getElementById('book-pages').value;
         bookPages = Number(bookPages)
         let bookRead = '';
@@ -257,13 +273,22 @@ addButton.addEventListener('click', () => {
             
             
         }
-        
-        formSection.setAttribute('style', 'visibility: hidden');
-        addBookToLibrary(bookTitle, bookAuthor, bookPages, bookRead)
+        console.log(typeof bookTitle)
+        console.log(bookTitleArray)
+        console.log(!bookTitleArray.includes(bookTitle))
+        if(!bookTitleArray.includes(bookTitle.toLowerCase())) {
+            formSection.setAttribute('style', 'visibility: hidden');
+            addBookToLibrary(bookTitle, bookAuthor, bookPages, bookRead)
+            document.getElementById('book-title').value = ''
+            document.getElementById('book-author').value = ''
+            document.getElementById('book-pages').value = ''
+        }
+        else{
+            
+            form.appendChild(errorMessage)
+        }
         //values are then reset.
-        document.getElementById('book-title').value = ''
-        document.getElementById('book-author').value = ''
-        document.getElementById('book-pages').value = ''
+        
         
         loopThroughArray()
 
@@ -273,7 +298,16 @@ addButton.addEventListener('click', () => {
 
 const closeFormButton = document.querySelector('.close-form');
 
-closeFormButton.addEventListener('click', () => {formSection.setAttribute('style', 'visibility: hidden')});
+closeFormButton.addEventListener('click', () => {
+    formSection.setAttribute('style', 'visibility: hidden');
+    document.getElementById('book-title').value = ''
+    document.getElementById('book-author').value = ''
+    document.getElementById('book-pages').value = ''
+    form.removeChild(errorMessage);
+    document.getElementById('true').checked = false;
+    document.getElementById('false').checked = false;
+});
+
 formSection.addEventListener('click', closeForm)
 
 function closeForm(e) {
