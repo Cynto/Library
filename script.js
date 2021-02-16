@@ -11,6 +11,70 @@ const errorMessage = document.createElement('h4');
 errorMessage.setAttribute('style', 'color: red; text-align: center;')
 errorMessage.textContent = 'The Library already contains this book!'
 
+var firebaseConfig = {
+    apiKey: "AIzaSyAQwET6RssBqpSN6q2lAWCBQUJMXqWuFRE",
+    authDomain: "javascript-library-d30d7.firebaseapp.com",
+    projectId: "javascript-library-d30d7",
+    storageBucket: "javascript-library-d30d7.appspot.com",
+    messagingSenderId: "714567497522",
+    appId: "1:714567497522:web:9d1912ac79fcd3523e492b",
+    databaseURL: "https://javascript-library-d30d7-default-rtdb.europe-west1.firebasedatabase.app/",
+    measurementId: "G-TS9Q4SHFZY"
+};
+firebase.initializeApp(firebaseConfig);
+firebase.analytics();
+let database = firebase.database();
+
+const dbRefObject = firebase.database().ref('myLibrary');
+dbRefObject.on('value', snap => console.log(snap.val()))
+
+
+
+
+function writeData(title, author, pages, readIt) {
+    dbRefObject.once('value', addData);
+    book = {
+        title: title,
+        author: author,
+        pages: pages, 
+        readIt: readIt
+    }
+    if(title != '') {
+        firebase.database().ref(`myLibrary`).push(book)
+    }
+    function addData(data) {
+       let books = data.val();
+       let keys = Object.keys(books);
+       
+       for(let i = 0; i < keys.length; i++) {
+            let k = keys[i];
+            firebase.database().ref('myLibrary/' + k).update({databook: i})
+        }
+     }
+}
+
+function deleteData(libraryDatabook) {
+    dbRefObject.once('value', loopData);
+    
+    function loopData(data){
+        let books = data.val();
+        let keys = Object.keys(books);
+        console.log(keys);
+        for(let i = 0; i < keys.length; i++) {
+            let k = keys[i];
+            let titles = books[k].title;
+            let author = books[k].author;
+            let databook = books[k].databook
+            if(databook === Number(libraryDatabook)) {
+                let toDelete = firebase.database().ref('myLibrary/' + k)
+                toDelete.remove()
+            }
+        }
+    }
+
+    
+
+}
 
 
 //array which stores book objects
@@ -28,7 +92,7 @@ function Book(title, author, pages, readIt) {
 function addBookToLibrary(title, author, pages, readIt) {
     const bookObject =  new Book(title, author, pages, readIt);
     myLibrary.push(bookObject);
-    addToStorage();
+    addToLocalStorage();
     
 }
 
@@ -103,18 +167,22 @@ function loopThroughArray() {
         readButton.textContent = 'Read';
         readButton.setAttribute('data-book', `${i}`)
 
-        const notReadButton = document.createElement('button');
-        notReadButton.classList.add('not-read-button');
-        notReadButton.textContent = 'Not Read';
-        notReadButton.setAttribute('data-book', `${i}`)
+        
 
         
         
         if(myLibrary[i].readIt === true) {
             buttonContainer.appendChild(readButton)
+            readButton.classList.remove('not-read-button');
+            readButton.classList.add('read-button')
+            readButton.textContent = 'Read';
+
         }
         else {
-            buttonContainer.appendChild(notReadButton)
+            buttonContainer.appendChild(readButton)
+            readButton.classList.remove('read-button')
+            readButton.classList.add('not-read-button');
+            readButton.textContent = 'Not Read';
         }
 
         
@@ -132,7 +200,11 @@ function loopThroughArray() {
                         myLibrary[readButton.getAttribute('data-book')].readIt = false;
                         let completedBooks = myLibrary.filter(a => a.readIt === true);
                         bookCompletedText.textContent = 'Completed Books: ' + completedBooks.length;
-                        console.log(myLibrary)
+                        //changes value in localstorage to false;
+                        obj = JSON.parse(localStorage.getItem(`myLibrary${readButton.getAttribute('data-book')}`))
+                        obj.readIt = false;
+                        localStorage.setItem(`myLibrary${readButton.getAttribute('data-book')}`, JSON.stringify(obj))
+                        
             
                     }
                 }
@@ -147,43 +219,14 @@ function loopThroughArray() {
                         myLibrary[readButton.getAttribute('data-book')].readIt = true;
                         let completedBooks = myLibrary.filter(a => a.readIt === true);
                         bookCompletedText.textContent = 'Completed Books: ' + completedBooks.length;
+                        obj = JSON.parse(localStorage.getItem(`myLibrary${readButton.getAttribute('data-book')}`))
+                        obj.readIt = true;
+                        localStorage.setItem(`myLibrary${readButton.getAttribute('data-book')}`, JSON.stringify(obj))
             
                     }
                 }
             }
-        })
-        notReadButton.addEventListener('click', () => {
-            if(notReadButton.textContent === 'Read') {
-                notReadButton.classList.remove('read-button')
-                notReadButton.classList.add('not-read-button');
-                notReadButton.textContent = 'Not Read';
-                for(i = 0; i < myLibrary.length; i++) {
-                    if(myLibrary[i].readIt === true) {
-                        myLibrary[notReadButton.getAttribute('data-book')].readIt = false;
-                        let completedBooks = myLibrary.filter(a => a.readIt === true);
-                        bookCompletedText.textContent = 'Completed Books: ' + completedBooks.length;
-                        console.log(myLibrary)
-            
-                    }
-                }
-                
-                
-                
-            }
-            else {
-                notReadButton.classList.add('read-button');
-                notReadButton.classList.remove('not-read-button')
-                notReadButton.textContent = 'Read';
-                for(i = 0; i < myLibrary.length; i++) {
-                    if(myLibrary[i].readIt === false) {
-                        myLibrary[notReadButton.getAttribute('data-book')].readIt = true;
-                        let completedBooks = myLibrary.filter(a => a.readIt === true);
-                        bookCompletedText.textContent = 'Completed Books: ' + completedBooks.length;
-            
-                    }
-                }
-            }
-        })
+        });
 
         const cardDeleteButton = document.createElement('button');
         cardDeleteButton.classList.add('card-delete');
@@ -203,7 +246,7 @@ function loopThroughArray() {
         function deleteBooks() {
             let click = deleteButton.value;
             click = Number(click)
-            //if 
+            
             myLibrary = myLibrary.filter(a => a.dataBook != click)
             let completedBooks = myLibrary.filter(a => a.readIt === true);
             //book and completed book count is updated
@@ -211,6 +254,8 @@ function loopThroughArray() {
             bookCountText.textContent = 'Books: ' + myLibrary.length;
             //deleted from local storage
             delete localStorage[`myLibrary${deleteButton.value}`]
+
+            deleteData(deleteButton.value)
            const allBooks = document.querySelectorAll(`[data-book="${deleteButton.value}"]`);
            //loops over all html elements with the same value as the delete button, then removes them.
            for(i = 0; i < allBooks.length; i++) {
@@ -228,7 +273,7 @@ function loopThroughArray() {
     
 
 }
-function addToStorage() {
+function addToLocalStorage() {
     for(i = 0; i < myLibrary.length; i++) {
         //array item is converted to string so it can be stored in localStorage
         localStorage.setItem(`myLibrary${i}`, JSON.stringify(myLibrary[i]));
@@ -279,9 +324,11 @@ addButton.addEventListener('click', () => {
         if(!bookTitleArray.includes(bookTitle.toLowerCase())) {
             formSection.setAttribute('style', 'visibility: hidden');
             addBookToLibrary(bookTitle, bookAuthor, bookPages, bookRead)
+            writeData(bookTitle, bookAuthor, bookPages, bookRead);
             document.getElementById('book-title').value = ''
             document.getElementById('book-author').value = ''
             document.getElementById('book-pages').value = ''
+            
         }
         else{
             
@@ -322,8 +369,11 @@ function closeForm(e) {
 //loops over localStorage and creates bookObjects which are then pushed to the myLibrary array;
 for(let i = 0; i < localStorage.length; i++) {
     storedLibrary = JSON.parse(localStorage.getItem(`myLibrary${i}`))
-    const bookObject = new Book(storedLibrary.title, storedLibrary.author, storedLibrary.pages, storedLibrary.readIt)
-    myLibrary.push(bookObject)
+    
+    if(storedLibrary != null && storedLibrary.title != '') {
+        const bookObject = new Book(storedLibrary.title, storedLibrary.author, storedLibrary.pages, storedLibrary.readIt)
+        myLibrary.push(bookObject)
+    }
 }
 function hasDuplicates(array) {
     return (new Set(array)).size !== array.length;
@@ -332,3 +382,5 @@ hasDuplicates(myLibrary)
 
 loopThroughArray();
 console.log(localStorage)
+
+
