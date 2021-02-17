@@ -1,3 +1,4 @@
+"use strict";
 const bookCountText = document.querySelector('#bookCount');
 const bookCompletedText = document.querySelector('#bookCompletedCount');
 const bookTitleContainer = document.querySelector('#book-titles');
@@ -44,6 +45,7 @@ function writeData(title, author, pages, readIt) {
     }
     function addData(data) {
        let books = data.val();
+
        let keys = Object.keys(books);
        
        for(let i = 0; i < keys.length; i++) {
@@ -113,7 +115,7 @@ function loopThroughArray() {
     let bookPagesArray = myLibrary.map(a => a.pages);
    
     
-    for(i = 0; i < myLibrary.length; i++) {
+    for(let i = 0; i < myLibrary.length; i++) {
           
         myLibrary[i].dataBook = i;
         
