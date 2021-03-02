@@ -84,11 +84,14 @@ let myLibrary = [];
 let storedLibrary = []
 
 //book object constructor
-function Book(title, author, pages, readIt) {
-    this.title = title;
-    this.author = author;
-    this.pages = pages;
-    this.readIt = readIt;
+class Book {
+    constructor(title, author, pages, readIt) {
+        this.title = title;
+        this.author = author;
+        this.pages = pages;
+        this.readIt = readIt;
+        }
+    
 }
 
 function addBookToLibrary(title, author, pages, readIt) {
