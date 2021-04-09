@@ -304,27 +304,27 @@ addButton.addEventListener('click', () => {
     } else if (document.getElementById('false').checked) {
       bookRead = false;
     }
-    if (
-      (bookTitle && bookAuthor && bookPages && bookRead === true) ||
-      bookRead === false
-    ) {
-    }
-    console.log(typeof bookTitle);
-    console.log(bookTitleArray);
-    console.log(!bookTitleArray.includes(bookTitle));
-    if (!bookTitleArray.includes(bookTitle.toLowerCase())) {
-      formSection.setAttribute('style', 'visibility: hidden');
-      addBookToLibrary(bookTitle, bookAuthor, bookPages, bookRead);
-      writeData(bookTitle, bookAuthor, bookPages, bookRead);
-      document.getElementById('book-title').value = '';
-      document.getElementById('book-author').value = '';
-      document.getElementById('book-pages').value = '';
-    } else {
-      form.appendChild(errorMessage);
-    }
-    //values are then reset.
 
-    loopThroughArray();
+    if (
+      !document.getElementById('book-title').validity.valueMissing &&
+      !document.getElementById('book-author').validity.valueMissing &&
+      !document.getElementById('book-pages').validity.valueMissing && 
+      (document.getElementById('true').checked || document.getElementById('false').checked)
+    ) {
+      if (!bookTitleArray.includes(bookTitle.toLowerCase())) {
+        formSection.setAttribute('style', 'visibility: hidden');
+        addBookToLibrary(bookTitle, bookAuthor, bookPages, bookRead);
+        writeData(bookTitle, bookAuthor, bookPages, bookRead);
+        document.getElementById('book-title').value = '';
+        document.getElementById('book-author').value = '';
+        document.getElementById('book-pages').value = '';
+      } else {
+        form.appendChild(errorMessage);
+      }
+      //values are then reset.
+
+      loopThroughArray();
+    }
   });
 });
 

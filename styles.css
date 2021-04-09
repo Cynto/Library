@@ -311,6 +311,9 @@ main {
 .new-book-form input:focus {
     outline: none;
 }
+.new-book-form input:invalid {
+    border-color: red;
+}
 #yes {
     position: absolute;
     top: 69%;
